@@ -70,7 +70,7 @@ jobs:
           ./scripts/feeds update -a > /dev/null
           rm -rf ./feeds/packages/net/netbird
           make defconfig
-
+          ./scripts/feeds update -a
           ./scripts/feeds install -d y -f -a
           make package/nezha/compile V=s
           tree bin/packages/
