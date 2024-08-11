@@ -56,7 +56,7 @@ jobs:
       - name: Build Package
         run: |
           echo "src-link nezha $GITHUB_WORKSPACE" > openwrt-sdk/feeds.conf
-          echo 'CONFIG_PACKAGE_luci-app-nezha=y
+          echo 'CONFIG_PACKAGE_nezha=y
           ' >> openwrt-sdk/.config
           cd openwrt-sdk
 
@@ -72,7 +72,7 @@ jobs:
           make defconfig
 
           ./scripts/feeds install -d y -f -a
-          make package/luci-app-nezha/compile V=s
+          make package/nezha/compile V=s
           tree bin/packages/
       - name: Archive package
         uses: actions/upload-artifact@v2
