@@ -67,7 +67,7 @@ jobs:
           echo 'src-git packages https://git.openwrt.org/feed/packages.git^875fcf3f125f857c515fd83894ed643466b84785' >> feeds.conf # feeds/packages: OpenWrt v23.05.0-rc2
           cat feeds.conf
 
-          ./scripts/feeds update -a > /dev/null
+          #./scripts/feeds update -a > /dev/null
           rm -rf ./feeds/packages/net/netbird
           make defconfig
           ./scripts/feeds update -a
