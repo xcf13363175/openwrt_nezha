@@ -124,5 +124,5 @@ jobs:
         body_path: release.txt
         files: |
           openwrt/bin/packages/x86_64/nezha/*
-          openwrt/bin/packages/aarch64_armv8-a/nezha/*
+          openwrt/bin/packages/brcm2708_bcm2710/nezha/*
           openwrt/bin/packages/i386_pentium4/nezha/*
