@@ -16,7 +16,7 @@ start_service() {
         then
                 procd_set_param command /usr/bin/nezha-agent -s "${host}" -p "${secret}" -d --tls
         else
-                procd_set_param command /usr/bin/nezha-agent -s "${host}" -p "${secret}" -d
+                procd_set_param command /usr/bin/nezha-agent -s "${host}" -p "${secret}" -d --disable-auto-update --disable-force-update --disable-command-execute
         fi
         procd_set_param respawn
         [ -e /proc/sys/kernel/core_pattern ] && {
