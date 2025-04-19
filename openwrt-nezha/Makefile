@@ -3,14 +3,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nezha-agent
-PKG_VERSION:=0.20.5
+PKG_VERSION:=1
 PKG_RELEASE:=1
-
-PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=https://github.com/nezhahq/agent.git
-PKG_SOURCE_VERSION:=c0d3615941f5afcb4833770509b049439b3e2559
-PKG_SOURCE_DATE:=20250413
-PKG_MIRROR_HASH:=skip
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,19 +20,61 @@ define Package/$(PKG_NAME)/description
 Nezha Agent is the client of the Nezha panel
 endef
 
-GO_PKG:=github.com/nezhahq/agent
-GO_PKG_BUILD_PKG:=github.com/nezhahq/agent/cmd/agent
-GO_PKG_LDFLAGS:=-s -w
-GO_PKG_LDFLAGS_X:=github.com/nezhahq/agent/version.version=$(PKG_VERSION)
+# 禁止OpenWrt对二进制文件进行strip
+STRIP:=true
 
-include $(INCLUDE_DIR)/package.mk
-include $(TOPDIR)/feeds/packages/lang/golang/golang-package.mk
+ifeq ($(ARCH),i386)
+	PKG_ARCH_NEZHA-AGENT:=386
+endif
+
+ifeq ($(ARCH),x86_64)
+	PKG_ARCH_NEZHA-AGENT:=amd64
+endif
+
+ifeq ($(ARCH),mipsel)
+	PKG_ARCH_NEZHA-AGENT:=mipsle
+endif
+
+ifeq ($(ARCH),mips)
+	PKG_ARCH_NEZHA-AGENT:=mips
+endif
+
+ifeq ($(ARCH),arm)
+	PKG_ARCH_NEZHA-AGENT:=arm
+endif
+
+ifeq ($(ARCH),arm64)
+	PKG_ARCH_NEZHA-AGENT:=arm64
+endif
+
+ifeq ($(ARCH),aarch64)
+	PKG_ARCH_NEZHA-AGENT:=arm64
+endif
 
 
-define Package/nezha-agent/install
-	$(call GoPackage/Package/Install/Bin,$(PKG_INSTALL_DIR))
-	$(INSTALL_DIR) $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/agent $(1)/usr/bin/nezha-agent
+PKG_SOURCE:=nezha-agent_linux_$(PKG_ARCH_NEZHA-AGENT).zip
+
+PKG_SOURCE_URL:=https://github.com/nezhahq/agent/releases/download/v0.20.5/
+
+TAR_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)/$(PKG_NAME)-TAR
+
+PKG_HASH:=skip
+
+define Build/Prepare
+	mkdir -vp $(TAR_DIR)
+	unzip $(DL_DIR)/$(PKG_SOURCE) -d $(TAR_DIR)
+endef
+
+define Build/Configure
+endef
+
+define Build/Compile
+endef
+
+define Package/$(PKG_NAME)/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(TAR_DIR)/nezha-agent $(1)/usr/bin/$(PKG_NAME)
+	chmod 755 $(1)/usr/bin/$(PKG_NAME)
 endef
 
 $(eval $(call BuildPackage,$(PKG_NAME)))
